@@ -11,7 +11,9 @@
 ## 資料夾結構
 
 ```
-test-project/
+test-project/                   # git repo 根目錄（GitHub: ideafused3d-bot/-vocabquest）
+├── .github/workflows/
+│   └── deploy-pages.yml        # push 到 master 時自動把 vocab-app/public 發布到 GitHub Pages
 ├── index.html                  # （無關）舊的 SaaS landing page 示範
 ├── CLAUDE.md                   # 本文件
 └── vocab-app/
@@ -51,9 +53,19 @@ test-project/
 2. Dashboard → **Authentication → Sign In / Up → Email → 關閉「Confirm email」**（必要！學生帳號用 `帳號名@vocab.local` 虛擬 email，收不到確認信）。
 3. Dashboard → SQL Editor → 貼上 `vocab-app/supabase/schema.sql` 全文執行。
 4. Dashboard → Project Settings → API → 複製 Project URL 與 anon key，填入 `public/js/config.js`。
-5. 把 `vocab-app/public/` 部署到靜態空間（Netlify / Vercel / GitHub Pages），或本機測試：`npx serve vocab-app/public`。
+5. 把 `vocab-app/public/` 部署到靜態空間，或本機測試：`npx serve vocab-app/public`（正式部署方式見下方「正式部署」章節）。
 6. 開網站 → 「建立老師帳號」分頁註冊 → **系統中第一個註冊的帳號自動成為老師**（`handle_new_user` trigger 判斷）。
 7. 老師後台 → 單字集 → 「匯入示範資料」可一鍵建立 2 個示範單字集（各 15 字）。
+
+## 正式部署（GitHub Pages）
+
+- **正式網址**：https://ideafused3d-bot.github.io/-vocabquest/
+- **原始碼**：https://github.com/ideafused3d-bot/-vocabquest
+- **部署方式**：`.github/workflows/deploy-pages.yml` — push 到 `master` 分支時，GitHub Actions 自動把 `vocab-app/public/`（只有這個子資料夾，repo 其他檔案不會公開發布）打包發布到 GitHub Pages。
+- **一次性設定**（已完成，記錄供未來參考）：repo → Settings → Pages → Build and deployment → Source 選 **GitHub Actions**（不是預設的 "Deploy from a branch"）；沒設定這個 workflow 會失敗並顯示 `Get Pages site failed`。
+- **`public/js/config.js` 有跟著一起進版控**：這是刻意的，不是疏漏。原因：這是純靜態網站、沒有建置流程，無法在部署時另外「注入」機密設定檔；而 Supabase anon key 依官方設計本來就是要曝露在瀏覽器端的公開值（每個 API 請求都會帶著送出），真正的資料防線是 Postgres 的 RLS 規則（見上方 RLS 摘要），不是這把 key 保密與否。專案裡完全沒有使用、也沒有儲存過 `service_role` key（那個才是真正絕對不能外流的）。
+- **部署驗證紀錄**（2026-07-04）：用 Playwright 對正式網址跑過完整登入流程（含 Supabase 驗證請求、跨網域 CORS）、登出流程，皆正常無誤，Console 無錯誤訊息。
+- 已保留但目前未使用的替代方案：`.github/workflows/deploy-pages.yml` 若之後想換成 Netlify/Vercel，直接刪掉這個 workflow、改用該平台連動同一個 GitHub repo（Publish directory 設 `vocab-app/public`，Build command 留空）即可，不影響其他檔案。
 
 ## 資料庫 Schema（`vocab-app/supabase/schema.sql`）
 
@@ -100,7 +112,7 @@ test-project/
 
 **老師端**：總覽（學生數/單字集數/總單字數/全體已熟記 + 近期活躍）、學生列表（streak/Lv/熟記數）、學生詳情（三狀態比例、被指派單字集進度、常錯 Top 10）、新增學生帳號、單字集 CRUD（名稱/分類/難度 + 單字逐列編輯 + 批次貼上「英文,中文」）、指派/取消指派學生、一鍵匯入示範資料、刪除單字集（confirm 保護）。
 
-**共用**：帳密登入、角色導向（登入後自動進對應頁面）、RWD（手機底部導覽）、`prefers-reduced-motion` 支援。
+**共用**：帳密登入、角色導向（登入後自動進對應頁面）、RWD（手機底部導覽）、`prefers-reduced-motion` 支援、登入頁下方隱私告知文字（小字、非彈窗，告知會記錄學習資料、僅本人與老師可見）。
 
 ## 已知技術債 / 未完成
 
