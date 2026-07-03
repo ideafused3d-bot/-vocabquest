@@ -1,0 +1,12 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+
+# 如果之後在 vocab-app 加了 Node 工具鏈（例如 Tailwind CLI），排除依賴目錄
+node_modules/
+
+# 注意：public/js/config.js 故意「沒有」被排除在外。
+# 原因見 CLAUDE.md「部署」章節：這是純靜態網站、沒有建置流程，
+# Supabase anon key 依設計就是要進到瀏覽器端，真正的資料防線是 RLS 規則，
+# 不是這把 key 保密與否。排除它反而會讓部署後的網站直接壞掉。

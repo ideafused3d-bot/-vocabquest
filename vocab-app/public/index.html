@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>單字冒險 VocabQuest — 登入</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Fredoka', 'Noto Sans TC', 'sans-serif'],
+          sans: ['Nunito', 'Noto Sans TC', 'sans-serif'],
+        },
+        colors: {
+          primary: { DEFAULT: '#EA580C', dark: '#C2410C', light: '#FDBA74', bg: '#FFF7ED' },
+          amber2: '#F59E0B',
+          okay: '#16A34A',
+          learn: '#4F46E5',
+        },
+        borderRadius: { xl2: '1.25rem' },
+        boxShadow: {
+          card: '0 2px 6px -1px rgb(124 45 18 / 0.08), 0 10px 24px -10px rgb(124 45 18 / 0.15)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+</style>
+</head>
+<body class="min-h-screen bg-primary-bg font-sans text-slate-800 antialiased">
+
+<main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-10">
+
+  <div class="text-center">
+    <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-primary to-amber2 text-white shadow-card" style="animation: float 3s ease-in-out infinite">
+      <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 19V6a2 2 0 012-2h13v13H6a2 2 0 00-2 2zm0 0a2 2 0 002 2h13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 8h6M9 11h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="mt-5 font-display text-4xl font-bold text-slate-900">VocabQuest</h1>
+    <p class="mt-2 text-slate-500">每天一點點，單字大冒險 🏆</p>
+  </div>
+
+  <!-- 分頁切換 -->
+  <div class="mt-8 flex rounded-full bg-orange-100 p-1" role="tablist">
+    <button id="tab-login" role="tab" aria-selected="true"
+      class="flex-1 rounded-full bg-white py-2.5 text-sm font-bold text-primary shadow-sm transition">
+      登入
+    </button>
+    <button id="tab-register" role="tab" aria-selected="false"
+      class="flex-1 rounded-full py-2.5 text-sm font-bold text-slate-500 transition">
+      建立老師帳號
+    </button>
+  </div>
+
+  <!-- 登入表單 -->
+  <form id="form-login" class="mt-6 space-y-4 rounded-xl2 bg-white p-6 shadow-card">
+    <div>
+      <label for="login-username" class="mb-1.5 block text-sm font-bold text-slate-700">帳號</label>
+      <input id="login-username" type="text" required autocomplete="username" autocapitalize="none"
+        class="w-full rounded-xl border-2 border-orange-100 bg-orange-50/50 px-4 py-3 text-base outline-none transition focus:border-primary focus:bg-white"
+        placeholder="你的帳號名稱" />
+    </div>
+    <div>
+      <label for="login-password" class="mb-1.5 block text-sm font-bold text-slate-700">密碼</label>
+      <input id="login-password" type="password" required autocomplete="current-password"
+        class="w-full rounded-xl border-2 border-orange-100 bg-orange-50/50 px-4 py-3 text-base outline-none transition focus:border-primary focus:bg-white"
+        placeholder="••••••" />
+    </div>
+    <p id="login-error" class="hidden rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600" role="alert"></p>
+    <button type="submit" id="login-btn"
+      class="w-full rounded-xl bg-primary py-3.5 font-display text-lg font-semibold text-white shadow-card transition hover:bg-primary-dark active:scale-[0.98]">
+      開始學習 →
+    </button>
+  </form>
+
+  <!-- 老師註冊表單（只有第一個註冊的帳號會成為老師） -->
+  <form id="form-register" class="mt-6 hidden space-y-4 rounded-xl2 bg-white p-6 shadow-card">
+    <p class="rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
+      ⚠️ 此表單供<strong>老師首次啟用</strong>使用：系統中第一個註冊的帳號會自動成為老師。之後學生帳號請由老師在管理後台建立。
+    </p>
+    <div>
+      <label for="reg-name" class="mb-1.5 block text-sm font-bold text-slate-700">顯示名稱</label>
+      <input id="reg-name" type="text" required
+        class="w-full rounded-xl border-2 border-orange-100 bg-orange-50/50 px-4 py-3 text-base outline-none transition focus:border-primary focus:bg-white"
+        placeholder="例如：王老師" />
+    </div>
+    <div>
+      <label for="reg-username" class="mb-1.5 block text-sm font-bold text-slate-700">帳號（英數字）</label>
+      <input id="reg-username" type="text" required pattern="[a-zA-Z0-9_]{3,20}" autocapitalize="none"
+        class="w-full rounded-xl border-2 border-orange-100 bg-orange-50/50 px-4 py-3 text-base outline-none transition focus:border-primary focus:bg-white"
+        placeholder="3-20 字元，例如 teacher01" />
+    </div>
+    <div>
+      <label for="reg-password" class="mb-1.5 block text-sm font-bold text-slate-700">密碼（至少 6 碼）</label>
+      <input id="reg-password" type="password" required minlength="6" autocomplete="new-password"
+        class="w-full rounded-xl border-2 border-orange-100 bg-orange-50/50 px-4 py-3 text-base outline-none transition focus:border-primary focus:bg-white"
+        placeholder="••••••" />
+    </div>
+    <p id="reg-error" class="hidden rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600" role="alert"></p>
+    <button type="submit" id="reg-btn"
+      class="w-full rounded-xl bg-primary py-3.5 font-display text-lg font-semibold text-white shadow-card transition hover:bg-primary-dark active:scale-[0.98]">
+      建立帳號
+    </button>
+  </form>
+
+  <p class="mt-6 text-center">
+    <a href="guide.html" class="text-sm font-bold text-slate-400 hover:text-primary">📖 使用手冊</a>
+  </p>
+
+  <p class="mt-4 px-4 text-center text-xs leading-relaxed text-slate-400">
+    這個網站會記錄你的學習資料（例如練習進度、答題紀錄），只有你自己和你的老師看得到。
+  </p>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/config.js"></script>
+<script src="js/common.js"></script>
+<script>
+  // 防呆：sb（Supabase client）沒定義成功，代表 config.js／common.js 沒載入。
+  // 直接秀出明確錯誤畫面，而不是讓按鈕卡在「處理中」+ Console 才看得到 ReferenceError。
+  if (typeof sb === 'undefined') {
+    document.body.innerHTML = `
+      <main style="max-width:420px;margin:15vh auto;padding:24px;text-align:center;font-family:sans-serif;color:#334155">
+        <p style="font-size:32px">⚠️</p>
+        <h1 style="font-size:18px;font-weight:700;margin-top:8px">網站資源載入失敗</h1>
+        <p style="margin-top:8px;color:#64748b;line-height:1.6">
+          請先重新整理頁面（電腦按 Ctrl+Shift+R 強制重新整理）。<br />
+          若持續發生，代表網站部署不完整，請確認 js/config.js 與 js/common.js 有正確上傳到伺服器。
+        </p>
+      </main>`;
+    throw new Error('common.js / config.js 未成功載入，sb 未定義');
+  }
+</script>
+<script>
+(async () => {
+  // 已登入者直接導向對應頁面
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    const { data: p } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
+    if (p) {
+      location.href = p.role === 'teacher' ? 'teacher.html' : 'student.html';
+    } else {
+      await sb.auth.signOut(); // 帳號存在但缺 profile，登出並留在登入頁顯示錯誤
+    }
+  }
+})();
+
+const tabLogin = document.getElementById('tab-login');
+const tabRegister = document.getElementById('tab-register');
+const formLogin = document.getElementById('form-login');
+const formRegister = document.getElementById('form-register');
+
+function switchTab(showLogin) {
+  formLogin.classList.toggle('hidden', !showLogin);
+  formRegister.classList.toggle('hidden', showLogin);
+  for (const [tab, active] of [[tabLogin, showLogin], [tabRegister, !showLogin]]) {
+    tab.setAttribute('aria-selected', String(active));
+    tab.classList.toggle('bg-white', active);
+    tab.classList.toggle('text-primary', active);
+    tab.classList.toggle('shadow-sm', active);
+    tab.classList.toggle('text-slate-500', !active);
+  }
+}
+tabLogin.addEventListener('click', () => switchTab(true));
+tabRegister.addEventListener('click', () => switchTab(false));
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+formLogin.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  document.getElementById('login-error').classList.add('hidden');
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true;
+  btn.textContent = '登入中…';
+  const { error } = await sb.auth.signInWithPassword({
+    email: toEmail(document.getElementById('login-username').value),
+    password: document.getElementById('login-password').value,
+  });
+  if (error) {
+    showError('login-error', '帳號或密碼錯誤，再試一次！');
+    btn.disabled = false;
+    btn.textContent = '開始學習 →';
+    return;
+  }
+  const { data: { user } } = await sb.auth.getUser();
+  const { data: p } = await sb.from('profiles').select('role').eq('id', user.id).single();
+  if (!p) {
+    await sb.auth.signOut();
+    showError('login-error', '帳號存在但缺少資料檔，請老師在 Supabase SQL Editor 執行 repair-profiles.sql 修復。');
+    btn.disabled = false;
+    btn.textContent = '開始學習 →';
+    return;
+  }
+  location.href = p.role === 'teacher' ? 'teacher.html' : 'student.html';
+});
+
+formRegister.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  document.getElementById('reg-error').classList.add('hidden');
+  const btn = document.getElementById('reg-btn');
+  btn.disabled = true;
+  btn.textContent = '建立中…';
+  const username = document.getElementById('reg-username').value;
+  const { error } = await sb.auth.signUp({
+    email: toEmail(username),
+    password: document.getElementById('reg-password').value,
+    options: {
+      data: {
+        username: username.trim().toLowerCase(),
+        display_name: document.getElementById('reg-name').value.trim(),
+      },
+    },
+  });
+  if (error) {
+    showError('reg-error', error.message.includes('already registered')
+      ? '這個帳號已經被使用了' : `建立失敗：${error.message}`);
+    btn.disabled = false;
+    btn.textContent = '建立帳號';
+    return;
+  }
+  const { data: { user } } = await sb.auth.getUser();
+  const { data: p } = await sb.from('profiles').select('role').eq('id', user.id).single();
+  location.href = p?.role === 'teacher' ? 'teacher.html' : 'student.html';
+});
+</script>
+</body>
+</html>

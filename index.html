@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nimbus — 讓團隊協作更快、更聰明</title>
+<meta name="description" content="Nimbus 是一套 AI 驅動的團隊協作與自動化平台，幫助你的團隊更快交付成果。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c3aed'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Avoid dark-mode flash -->
+<script>
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+
+<!-- Tailwind (CDN build) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          display: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+            400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9',
+            800: '#5b21b6', 900: '#4c1d95',
+          },
+        },
+        boxShadow: {
+          soft: '0 2px 8px -2px rgb(15 23 42 / 0.08), 0 8px 24px -8px rgb(15 23 42 / 0.10)',
+          glow: '0 0 0 1px rgb(124 58 237 / 0.15), 0 8px 30px -8px rgb(124 58 237 / 0.35)',
+        },
+        keyframes: {
+          fadeUp: { '0%': { opacity: 0, transform: 'translateY(16px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { font-family: 'Inter', sans-serif; }
+  .font-display { font-family: 'Manrope', sans-serif; }
+
+  [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .6s ease-out, transform .6s ease-out; }
+  [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .bg-grid {
+    background-image: radial-gradient(circle, rgb(124 58 237 / 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .bg-grid {
+    background-image: radial-gradient(circle, rgb(167 139 250 / 0.15) 1px, transparent 1px);
+  }
+
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .faq-icon { transform: rotate(45deg); }
+</style>
+</head>
+
+<body class="bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-white">
+  跳到主要內容
+</a>
+
+<!-- ============ NAV ============ -->
+<header class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-950/80">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8" aria-label="主導覽">
+    <a href="#" class="flex items-center gap-2 shrink-0">
+      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-soft" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M4 17L10 7L14 13L20 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="font-display text-lg font-extrabold tracking-tight">Nimbus</span>
+    </a>
+
+    <div class="hidden items-center gap-8 lg:flex">
+      <a href="#features" class="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">功能</a>
+      <a href="#how" class="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">運作方式</a>
+      <a href="#pricing" class="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">價格方案</a>
+      <a href="#testimonials" class="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">客戶評價</a>
+      <a href="#faq" class="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">常見問題</a>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button id="theme-toggle" type="button" aria-label="切換深色模式" class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+        <svg id="icon-sun" class="hidden h-5 w-5 dark:block" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg id="icon-moon" class="block h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+
+      <a href="#" class="hidden rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 sm:inline-flex dark:text-slate-200 dark:hover:bg-slate-800">登入</a>
+      <a href="#pricing" class="hidden items-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700 sm:inline-flex">
+        免費試用
+      </a>
+
+      <button id="menu-toggle" type="button" aria-label="開啟選單" aria-expanded="false" aria-controls="mobile-menu" class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden dark:text-slate-300 dark:hover:bg-slate-800">
+        <svg id="icon-menu" class="h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-slate-200 bg-white px-4 py-4 lg:hidden dark:border-slate-800 dark:bg-slate-950">
+    <div class="flex flex-col gap-1">
+      <a href="#features" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">功能</a>
+      <a href="#how" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">運作方式</a>
+      <a href="#pricing" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">價格方案</a>
+      <a href="#testimonials" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">客戶評價</a>
+      <a href="#faq" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">常見問題</a>
+      <div class="mt-3 flex gap-2 border-t border-slate-200 pt-3 dark:border-slate-800">
+        <a href="#" class="flex-1 rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">登入</a>
+        <a href="#pricing" class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-brand-700">免費試用</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="relative overflow-hidden bg-grid">
+    <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 flex justify-center blur-3xl" aria-hidden="true">
+      <div class="h-[420px] w-[720px] rounded-full bg-gradient-to-tr from-brand-300 to-brand-500 opacity-30 dark:opacity-20"></div>
+    </div>
+
+    <div class="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8">
+      <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-8">
+        <div data-reveal>
+          <a href="#" class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-300">
+            <span class="flex h-1.5 w-1.5 rounded-full bg-brand-600" aria-hidden="true"></span>
+            新功能：AI 自動化工作流已上線
+          </a>
+
+          <h1 class="mt-5 font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl dark:text-white">
+            讓團隊協作，<br class="hidden sm:block" />
+            <span class="bg-gradient-to-r from-brand-600 to-fuchsia-500 bg-clip-text text-transparent">快人一步</span>
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+            Nimbus 整合任務管理、即時協作與 AI 自動化，幫助你的團隊減少雜事、專注在真正重要的工作上。
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#pricing" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600">
+              免費開始使用
+            </a>
+            <a href="#how" class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              觀看產品介紹
+            </a>
+          </div>
+
+          <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+            <span class="inline-flex items-center gap-1.5">
+              <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              免信用卡
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              14 天免費試用
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              隨時可取消
+            </span>
+          </div>
+        </div>
+
+        <!-- Hero visual mockup -->
+        <div data-reveal style="transition-delay:120ms" class="relative" aria-hidden="true">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+            <div class="flex items-center gap-1.5 pb-4">
+              <span class="h-2.5 w-2.5 rounded-full bg-rose-400"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+              <span class="ml-3 h-6 flex-1 rounded-md bg-slate-100 dark:bg-slate-800"></span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div class="col-span-2 rounded-xl bg-gradient-to-br from-brand-600 to-fuchsia-500 p-4 text-white">
+                <p class="text-xs font-medium text-white/80">本週產出</p>
+                <p class="mt-1 font-display text-2xl font-extrabold">+128%</p>
+                <div class="mt-4 flex items-end gap-1.5">
+                  <div class="h-8 w-3 rounded-t bg-white/40"></div>
+                  <div class="h-12 w-3 rounded-t bg-white/60"></div>
+                  <div class="h-6 w-3 rounded-t bg-white/40"></div>
+                  <div class="h-16 w-3 rounded-t bg-white"></div>
+                  <div class="h-10 w-3 rounded-t bg-white/60"></div>
+                </div>
+              </div>
+              <div class="flex flex-col gap-3">
+                <div class="flex-1 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+                  <p class="text-xs text-slate-500 dark:text-slate-400">活躍任務</p>
+                  <p class="font-display text-xl font-bold text-slate-900 dark:text-white">32</p>
+                </div>
+                <div class="flex-1 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+                  <p class="text-xs text-slate-500 dark:text-slate-400">完成率</p>
+                  <p class="font-display text-xl font-bold text-slate-900 dark:text-white">94%</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 space-y-2">
+              <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div class="h-2 flex-1 rounded bg-slate-100 dark:bg-slate-800"></div>
+              </div>
+              <div class="flex items-center gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/></svg>
+                </span>
+                <div class="h-2 w-2/3 rounded bg-slate-100 dark:bg-slate-800"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="absolute -bottom-6 -left-6 hidden rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-soft sm:block dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-2">
+                <span class="h-7 w-7 rounded-full border-2 border-white bg-brand-500 dark:border-slate-900"></span>
+                <span class="h-7 w-7 rounded-full border-2 border-white bg-fuchsia-500 dark:border-slate-900"></span>
+                <span class="h-7 w-7 rounded-full border-2 border-white bg-amber-500 dark:border-slate-900"></span>
+              </div>
+              <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">12 位夥伴正在協作</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOGO CLOUD ============ -->
+  <section class="border-y border-slate-200 bg-slate-50 py-10 dark:border-slate-800 dark:bg-slate-900/50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p class="text-center text-sm font-medium text-slate-500 dark:text-slate-400">超過 4,000 家團隊信賴 Nimbus</p>
+      <div class="mt-6 grid grid-cols-2 items-center gap-x-8 gap-y-6 opacity-70 grayscale sm:grid-cols-3 lg:grid-cols-6">
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">ACME</span>
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">Northwind</span>
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">Globex</span>
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">Initech</span>
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">Umbrella</span>
+        <span class="text-center font-display text-xl font-bold text-slate-500 dark:text-slate-400">Wayne&nbsp;Co.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <h2 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+        一站式打造高效團隊
+      </h2>
+      <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">
+        從任務規劃到自動化流程，Nimbus 提供團隊真正需要的每一項工具。
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Feature 1 -->
+      <div data-reveal class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">AI 自動化工作流</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">設定一次條件，讓 Nimbus 自動分派任務、更新狀態並通知相關夥伴。</p>
+      </div>
+      <!-- Feature 2 -->
+      <div data-reveal style="transition-delay:80ms" class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17 8l4 4-4 4M7 8l-4 4 4 4M14 4l-4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">深度整合</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">一鍵串接 Slack、GitHub、Google Workspace 等 30+ 常用工具。</p>
+      </div>
+      <!-- Feature 3 -->
+      <div data-reveal style="transition-delay:160ms" class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 3v18h18M8 17V9m5 8V5m5 12v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">即時數據儀表板</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">掌握團隊進度與效能指標，用數據驅動每一次決策。</p>
+      </div>
+      <!-- Feature 4 -->
+      <div data-reveal class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="2"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">企業級安全</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">SSO、SOC 2 合規與端對端加密，資料安全由始至終。</p>
+      </div>
+      <!-- Feature 5 -->
+      <div data-reveal style="transition-delay:80ms" class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-2.13a4 4 0 100-8 4 4 0 000 8zm6 0a4 4 0 100-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">即時協作</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">共同編輯文件、留言與標記夥伴，溝通不再散落各處。</p>
+      </div>
+      <!-- Feature 6 -->
+      <div data-reveal style="transition-delay:160ms" class="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a15.3 15.3 0 000 20M12 2a15.3 15.3 0 010 20M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <h3 class="mt-4 font-display text-lg font-bold text-slate-900 dark:text-white">跨平台同步</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Web、桌面與行動裝置即時同步，隨時隨地掌握進度。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how" class="bg-slate-50 py-20 sm:py-28 dark:bg-slate-900/50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center" data-reveal>
+        <h2 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">三個步驟，即刻上手</h2>
+        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">無需複雜設定，幾分鐘內就能讓團隊運作起來。</p>
+      </div>
+
+      <div class="relative mt-16 grid gap-10 sm:grid-cols-3">
+        <div class="absolute left-0 right-0 top-6 hidden h-px bg-slate-200 sm:block dark:bg-slate-800" aria-hidden="true"></div>
+
+        <div data-reveal class="relative text-center">
+          <span class="relative z-10 mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 font-display text-lg font-bold text-white shadow-soft">1</span>
+          <h3 class="mt-5 font-display text-lg font-bold text-slate-900 dark:text-white">建立工作區</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">30 秒完成註冊，邀請團隊成員加入你的專屬工作空間。</p>
+        </div>
+        <div data-reveal style="transition-delay:100ms" class="relative text-center">
+          <span class="relative z-10 mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 font-display text-lg font-bold text-white shadow-soft">2</span>
+          <h3 class="mt-5 font-display text-lg font-bold text-slate-900 dark:text-white">串接你的工具</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">連接常用應用程式，讓資料與通知自動同步到 Nimbus。</p>
+        </div>
+        <div data-reveal style="transition-delay:200ms" class="relative text-center">
+          <span class="relative z-10 mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 font-display text-lg font-bold text-white shadow-soft">3</span>
+          <h3 class="mt-5 font-display text-lg font-bold text-slate-900 dark:text-white">開始自動化</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">設定規則，讓重複性工作自動完成，團隊專注在真正重要的事。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 gap-6 rounded-2xl bg-gradient-to-br from-brand-600 to-fuchsia-600 p-8 text-center text-white sm:grid-cols-4 sm:p-12" data-reveal>
+      <div>
+        <p class="font-display text-3xl font-extrabold sm:text-4xl">4,000+</p>
+        <p class="mt-1 text-sm text-white/80">使用團隊</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl font-extrabold sm:text-4xl">99.9%</p>
+        <p class="mt-1 text-sm text-white/80">服務可用性</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl font-extrabold sm:text-4xl">2.4M</p>
+        <p class="mt-1 text-sm text-white/80">每月自動化任務</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl font-extrabold sm:text-4xl">4.9/5</p>
+        <p class="mt-1 text-sm text-white/80">用戶滿意度</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section id="testimonials" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <h2 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">深受團隊喜愛</h2>
+      <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">聽聽正在使用 Nimbus 的團隊怎麼說。</p>
+    </div>
+
+    <div class="mt-14 grid gap-6 lg:grid-cols-3">
+      <figure data-reveal class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <blockquote class="text-slate-700 dark:text-slate-200">
+          <p>「導入 Nimbus 之後，我們的專案交付時間縮短了將近三成，跨部門溝通也順暢很多。」</p>
+        </blockquote>
+        <figcaption class="mt-6 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">李</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900 dark:text-white">李雅婷</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">產品總監，ACME</p>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure data-reveal style="transition-delay:80ms" class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <blockquote class="text-slate-700 dark:text-slate-200">
+          <p>「自動化功能幾乎取代了我們一半的行政作業，團隊現在能把時間花在真正重要的事情上。」</p>
+        </blockquote>
+        <figcaption class="mt-6 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">陳</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900 dark:text-white">陳柏宇</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">工程經理，Northwind</p>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure data-reveal style="transition-delay:160ms" class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <blockquote class="text-slate-700 dark:text-slate-200">
+          <p>「介面直覺、上手快，客服回應也非常即時，是我們用過最順手的協作平台。」</p>
+        </blockquote>
+        <figcaption class="mt-6 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-display text-sm font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">王</span>
+          <div>
+            <p class="text-sm font-semibold text-slate-900 dark:text-white">王思穎</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">營運主管，Globex</p>
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="bg-slate-50 py-20 sm:py-28 dark:bg-slate-900/50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center" data-reveal>
+        <h2 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">簡單透明的價格方案</h2>
+        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">依團隊規模彈性選擇，隨時可升級或降級。</p>
+      </div>
+
+      <div class="mx-auto mt-14 grid max-w-5xl gap-6 lg:grid-cols-3">
+        <!-- Starter -->
+        <div data-reveal class="flex flex-col rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+          <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Starter</h3>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">適合小型團隊起步</p>
+          <p class="mt-6"><span class="font-display text-4xl font-extrabold text-slate-900 dark:text-white">NT$0</span><span class="text-sm text-slate-500 dark:text-slate-400"> / 月</span></p>
+          <a href="#" class="mt-6 inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">開始免費使用</a>
+          <ul class="mt-8 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>最多 5 位成員</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>基礎任務管理</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>2 組工具整合</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>社群支援</li>
+          </ul>
+        </div>
+
+        <!-- Pro (highlighted) -->
+        <div data-reveal style="transition-delay:80ms" class="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white p-8 shadow-glow dark:bg-slate-900">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">最受歡迎</span>
+          <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Pro</h3>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">適合成長中的團隊</p>
+          <p class="mt-6"><span class="font-display text-4xl font-extrabold text-slate-900 dark:text-white">NT$990</span><span class="text-sm text-slate-500 dark:text-slate-400"> / 人 / 月</span></p>
+          <a href="#" class="mt-6 inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700">開始 14 天免費試用</a>
+          <ul class="mt-8 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>無限成員</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>AI 自動化工作流</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>30+ 工具整合</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>進階數據儀表板</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>優先客服支援</li>
+          </ul>
+        </div>
+
+        <!-- Enterprise -->
+        <div data-reveal style="transition-delay:160ms" class="flex flex-col rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900">
+          <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Enterprise</h3>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">適合大型組織</p>
+          <p class="mt-6"><span class="font-display text-4xl font-extrabold text-slate-900 dark:text-white">客製報價</span></p>
+          <a href="#" class="mt-6 inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">聯絡業務團隊</a>
+          <ul class="mt-8 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro 所有功能</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>單一登入 (SSO)</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>專屬客戶成功經理</li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>99.9% SLA 保證</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <div class="text-center" data-reveal>
+      <h2 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">常見問題</h2>
+      <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">還有其他問題？歡迎<a href="#" class="font-semibold text-brand-600 hover:underline dark:text-brand-400">聯絡我們</a>。</p>
+    </div>
+
+    <div class="mt-12 space-y-4" data-reveal>
+      <details class="group rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900" open>
+        <summary class="flex items-center justify-between gap-4 font-semibold text-slate-900 dark:text-white">
+          我需要信用卡才能開始試用嗎？
+          <svg class="faq-icon h-5 w-5 shrink-0 text-slate-400 transition-transform" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">不需要。你可以直接使用 Email 註冊，免信用卡即可體驗 14 天完整功能。</p>
+      </details>
+
+      <details class="group rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <summary class="flex items-center justify-between gap-4 font-semibold text-slate-900 dark:text-white">
+          可以隨時更換或取消方案嗎？
+          <svg class="faq-icon h-5 w-5 shrink-0 text-slate-400 transition-transform" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">可以，你能隨時在帳戶設定中升級、降級或取消訂閱，不收取額外手續費。</p>
+      </details>
+
+      <details class="group rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <summary class="flex items-center justify-between gap-4 font-semibold text-slate-900 dark:text-white">
+          Nimbus 支援哪些第三方整合？
+          <svg class="faq-icon h-5 w-5 shrink-0 text-slate-400 transition-transform" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">我們支援 Slack、GitHub、Google Workspace、Notion 等 30 種以上常用工具，並持續新增中。</p>
+      </details>
+
+      <details class="group rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <summary class="flex items-center justify-between gap-4 font-semibold text-slate-900 dark:text-white">
+          資料安全性如何保障？
+          <svg class="faq-icon h-5 w-5 shrink-0 text-slate-400 transition-transform" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">我們採用端對端加密並通過 SOC 2 Type II 稽核，所有資料皆儲存於符合國際標準的資料中心。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="relative overflow-hidden rounded-2xl bg-slate-900 px-6 py-16 text-center sm:px-16" data-reveal>
+      <div class="pointer-events-none absolute inset-0 bg-grid opacity-30" aria-hidden="true"></div>
+      <h2 class="relative font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">準備好讓團隊更高效了嗎？</h2>
+      <p class="relative mx-auto mt-4 max-w-xl text-lg text-slate-300">立即開始 14 天免費試用，體驗 Nimbus 如何改變你的工作方式。</p>
+      <div class="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="#" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+          免費開始使用
+        </a>
+        <a href="#" class="inline-flex items-center justify-center rounded-lg border border-slate-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
+          預約產品展示
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-5">
+      <div class="lg:col-span-2">
+        <a href="#" class="flex items-center gap-2">
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white" aria-hidden="true">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M4 17L10 7L14 13L20 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="font-display text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">Nimbus</span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          AI 驅動的團隊協作平台，幫助全球超過 4,000 個團隊更快交付成果。
+        </p>
+        <div class="mt-6 flex gap-3">
+          <a href="#" aria-label="Nimbus on X" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7.1l-5.6-7.3L4.2 22H1l8.2-9.4L1 2h7.3l5 6.6L18.9 2Zm-1.2 18h1.9L7.4 4H5.3l12.4 16Z"/></svg>
+          </a>
+          <a href="#" aria-label="Nimbus on LinkedIn" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C21.6 8.65 23 11 23 14.8V21h-4v-5.4c0-1.3-.02-2.97-1.8-2.97-1.8 0-2.08 1.4-2.08 2.87V21h-4V9Z"/></svg>
+          </a>
+          <a href="#" aria-label="Nimbus on GitHub" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-3.16 19.5c.5.1.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.93 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.9-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.83-2.34 4.68-4.57 4.92.36.31.68.92.68 1.85V21c0 .27.18.58.69.48A10 10 0 0012 2Z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">產品</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <li><a href="#features" class="hover:text-slate-900 dark:hover:text-white">功能</a></li>
+          <li><a href="#pricing" class="hover:text-slate-900 dark:hover:text-white">價格方案</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">整合</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">更新日誌</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">公司</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">關於我們</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">部落格</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">徵才</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">聯絡我們</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">法律資訊</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">隱私權政策</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">服務條款</a></li>
+          <li><a href="#" class="hover:text-slate-900 dark:hover:text-white">資安政策</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
+      <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2026 Nimbus, Inc. 版權所有。</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400">Made with care for teams everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.theme = isDark ? 'dark' : 'light';
+  });
+
+  // Mobile menu
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('hidden') === false;
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    iconMenu.classList.toggle('hidden', isOpen);
+    iconClose.classList.toggle('hidden', !isOpen);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    iconMenu.classList.remove('hidden');
+    iconClose.classList.add('hidden');
+  }));
+
+  // Scroll reveal
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
+  }
+</script>
+</body>
+</html>

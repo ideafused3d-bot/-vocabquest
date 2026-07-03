@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VocabQuest 使用手冊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Fredoka', 'Noto Sans TC', 'sans-serif'],
+          sans: ['Nunito', 'Noto Sans TC', 'sans-serif'],
+        },
+        colors: {
+          primary: { DEFAULT: '#EA580C', dark: '#C2410C', bg: '#FFF7ED' },
+          okay: '#16A34A',
+          learn: '#4F46E5',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white !important; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="min-h-screen bg-primary-bg font-sans text-slate-800 antialiased">
+
+<header class="border-b border-orange-100 bg-white">
+  <div class="mx-auto flex max-w-3xl items-center justify-between px-5 py-4">
+    <div class="flex items-center gap-2">
+      <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-amber-500 text-white" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M4 19V6a2 2 0 012-2h13v13H6a2 2 0 00-2 2zm0 0a2 2 0 002 2h13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="font-display text-lg font-semibold text-slate-900">VocabQuest 使用手冊</span>
+    </div>
+    <div class="no-print flex gap-2">
+      <button onclick="window.print()" class="rounded-lg border-2 border-orange-100 px-3 py-1.5 text-sm font-bold text-slate-600 hover:bg-orange-50">🖨 列印</button>
+      <a href="index.html" class="rounded-lg bg-primary px-3 py-1.5 text-sm font-bold text-white hover:bg-primary-dark">回登入頁</a>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-3xl space-y-10 px-5 py-10">
+
+  <!-- 目錄 -->
+  <nav class="no-print rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-lg font-semibold text-slate-900">目錄</h2>
+    <ol class="mt-3 grid gap-1.5 text-sm font-bold text-learn sm:grid-cols-2">
+      <li><a class="hover:underline" href="#teacher">1. 老師端操作</a></li>
+      <li><a class="hover:underline" href="#words">2. 單字要怎麼輸入（含拍照）</a></li>
+      <li><a class="hover:underline" href="#homework">3. 怎麼分別給學生出功課</a></li>
+      <li><a class="hover:underline" href="#student">4. 學生端操作</a></li>
+      <li><a class="hover:underline" href="#srs">5. 複習機制與遊戲化規則</a></li>
+      <li><a class="hover:underline" href="#trouble">6. 疑難排解（登入問題看這裡）</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1. 老師端 -->
+  <section id="teacher" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">1. 老師端操作 👩‍🏫</h2>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">登入</h3>
+    <p class="mt-1 leading-relaxed">開網站 → 「登入」分頁 → 輸入你的帳號與密碼。系統中<strong>第一個註冊的帳號</strong>就是老師，之後所有透過「建立老師帳號」分頁註冊的帳號都會是學生身分（防止學生自己升級成老師）。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">新增學生帳號</h3>
+    <ol class="mt-1 list-decimal space-y-1 pl-5 leading-relaxed">
+      <li>底部導覽點「<strong>學生</strong>」→ 右上「<strong>＋ 新增學生</strong>」</li>
+      <li>填學生姓名、帳號（英數字，例如 <code class="rounded bg-orange-50 px-1">ming01</code>）、密碼（至少 6 碼）</li>
+      <li>把帳號密碼抄給學生。學生不需要 Email</li>
+    </ol>
+    <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">💡 密碼建好後老師端看不到，請當下記下來。學生忘記密碼時的處理方式見第 6 章。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">查看學生學習狀況</h3>
+    <p class="mt-1 leading-relaxed">「學生」頁列表可看每位學生的連續天數 🔥、等級 ⭐、熟記數 ✅。點任一位學生進入詳情頁：三色進度條（已熟記／學習中／未學習）、被指派的單字集各自的熟記進度、以及「常答錯單字 Top 10」——下次上課針對這些單字加強最有效。</p>
+  </section>
+
+  <!-- 2. 單字輸入 -->
+  <section id="words" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">2. 單字要怎麼輸入 🔤</h2>
+    <p class="mt-2 leading-relaxed">底部導覽點「<strong>單字集</strong>」→「<strong>＋ 新增單字集</strong>」，填名稱（例如 <code class="rounded bg-orange-50 px-1">Unit 1 - 日常生活</code>）、分類、難度（初級／中級／高級），然後輸入單字。有三種方式：</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">方式一：逐列輸入</h3>
+    <p class="mt-1 leading-relaxed">直接在「英文」「中文」欄位打字，按「＋ 新增一列」繼續加。適合少量單字或臨時補字。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">方式二：批次貼上（最快）</h3>
+    <p class="mt-1 leading-relaxed">點單字清單右上角的「<strong>批次貼上</strong>」，把整理好的清單貼進去，一行一個單字，英文和中文用逗號隔開：</p>
+    <pre class="mt-2 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm text-orange-200">apple,蘋果
+school,學校
+beautiful,美麗的</pre>
+    <p class="mt-2 leading-relaxed">按「加入清單」就會全部變成單字列。你平常用 Excel 或 Google 試算表整理單字的話，兩欄複製貼上就是這個格式。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">方式三：從課本照片匯入 📷</h3>
+    <p class="mt-1 leading-relaxed">網站目前<strong>不能直接上傳照片</strong>，但用手機內建的文字擷取功能，拍照 → 變文字 → 批次貼上，實際操作大約一分鐘：</p>
+    <ul class="mt-2 space-y-2 pl-1 leading-relaxed">
+      <li><strong>iPhone</strong>：用相機拍下課本單字頁 → 打開照片 → 長按照片上的文字（或點右下角文字擷取圖示）→ 全選複製</li>
+      <li><strong>Android</strong>：打開 Google 相簿或 Google 智慧鏡頭（Lens）→ 選照片 → 點「文字」→ 選取複製</li>
+    </ul>
+    <p class="mt-2 leading-relaxed">貼到任何記事本整理成 <code class="rounded bg-orange-50 px-1">英文,中文</code> 的格式（每行一個），再貼進「批次貼上」即可。</p>
+    <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">💡 想要「上傳照片自動辨識單字」的一鍵功能？技術上可行（需串接 OCR / AI 服務），屬於未來擴充項目，跟開發者說一聲就能排進去。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">發音從哪裡來？</h3>
+    <p class="mt-1 leading-relaxed">不用準備音檔。學生按 🔊 時由瀏覽器內建的語音合成（Web Speech API）唸出英文，手機和電腦都支援。</p>
+  </section>
+
+  <!-- 3. 出功課 -->
+  <section id="homework" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">3. 怎麼分別給學生出功課 📋</h2>
+    <p class="mt-2 leading-relaxed"><strong>可以，而且這正是系統的核心設計。</strong>「指派單字集」就是出功課——每個單字集可以指派給不同的學生組合，每位學生只會看到（也只能練習）被指派給自己的單字集。</p>
+    <ol class="mt-3 list-decimal space-y-1 pl-5 leading-relaxed">
+      <li>「單字集」頁 → 找到要出的單字集 → 按「<strong>指派</strong>」</li>
+      <li>勾選要練這份的學生（可只勾一位，也可勾多位）→「儲存指派」</li>
+      <li>取消勾選再儲存＝收回功課（學生的練習紀錄會保留）</li>
+    </ol>
+    <p class="mt-3 leading-relaxed">實際運用範例：</p>
+    <div class="mt-2 overflow-x-auto">
+      <table class="w-full min-w-[480px] text-sm">
+        <thead><tr class="border-b-2 border-orange-100 text-left text-slate-500">
+          <th class="py-2 pr-4">情境</th><th class="py-2">做法</th>
+        </tr></thead>
+        <tbody class="divide-y divide-orange-50">
+          <tr><td class="py-2 pr-4 font-bold">程度分班</td><td class="py-2">建「初級 Unit 1」指派給小明；建「高級 Unit 1」指派給小美</td></tr>
+          <tr><td class="py-2 pr-4 font-bold">每週功課</td><td class="py-2">每週建一個新單字集（Week 1、Week 2…），週週指派</td></tr>
+          <tr><td class="py-2 pr-4 font-bold">考前衝刺</td><td class="py-2">把段考範圍做成一個單字集，只指派給要考試的學生</td></tr>
+          <tr><td class="py-2 pr-4 font-bold">補救教學</td><td class="py-2">看學生詳情頁的「常答錯 Top 10」，做成專屬複習集指派給他</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">💡 目前沒有「截止日期」功能，指派後學生隨時可練。系統的 SRS 排程（第 5 章）會自動安排每天該複習什麼，比死線更符合記憶科學。想加截止日提醒屬於可擴充項目。</p>
+  </section>
+
+  <!-- 4. 學生端 -->
+  <section id="student" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">4. 學生端操作 🧑‍🎓</h2>
+    <p class="mt-2 leading-relaxed">用老師給的帳號密碼登入，看到自己的儀表板：連續學習天數 🔥、等級與 XP 進度條 ⭐、已熟記單字數 ✅、待複習數 ⏰。</p>
+    <ul class="mt-3 space-y-2 pl-1 leading-relaxed">
+      <li><strong>📅 每日複習</strong>：最重要的按鈕！系統自動排出今天到期的單字＋新單字，每天按一次持續累積</li>
+      <li><strong>單字集練習</strong>：想加強哪份功課，就按那份單字集的「練習」</li>
+      <li><strong>📕 錯題本</strong>：答錯 2 次以上的單字自動收錄，可針對性複習，熟記後自動移除</li>
+      <li><strong>題型</strong>：選擇題（看中文選英文）和拼字題（看中文＋聽發音，拼出英文）輪流出現；拼字題 XP 較高</li>
+      <li><strong>進度</strong>頁：看自己「已熟記／學習中／未學習」的比例和各單字集進度</li>
+    </ul>
+    <p class="mt-3 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">🔥 連續天數的條件是「每天至少完成 1 題」，中斷就歸零重算——鼓勵學生每天打開練一下，比週末狂練一次有效得多。</p>
+  </section>
+
+  <!-- 5. SRS -->
+  <section id="srs" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">5. 複習機制與遊戲化規則 🧠</h2>
+    <p class="mt-2 leading-relaxed">系統採用<strong>間隔重複（SRS，Leitner 盒子法）</strong>：每個單字有 0～6 的熟練度等級，答對升一級、複習間隔拉長；答錯降兩級、隔天就要再複習。</p>
+    <div class="mt-3 overflow-x-auto">
+      <table class="w-full min-w-[420px] text-center text-sm">
+        <thead><tr class="border-b-2 border-orange-100 text-slate-500">
+          <th class="py-2">熟練度</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+        </tr></thead>
+        <tbody>
+          <tr class="border-b border-orange-50"><td class="py-2 font-bold text-slate-500">下次複習</td><td>當天</td><td>1 天</td><td>2 天</td><td>4 天</td><td>7 天</td><td>15 天</td><td>30 天</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-2 leading-relaxed">熟練度達 <strong>5 以上＝「已熟記」</strong>。之後仍會偶爾出現複習，防止遺忘。</p>
+    <h3 class="mt-4 font-display text-lg font-semibold text-primary">XP 與等級</h3>
+    <ul class="mt-1 space-y-1 pl-1 leading-relaxed">
+      <li>選擇題答對 <strong>+10 XP</strong>、拼字題答對 <strong>+15 XP</strong>、答錯也有 +2 XP 安慰分</li>
+      <li>升到下一級需要「目前等級 × 100」XP（Lv.1→2 要 100，Lv.2→3 要 200…）</li>
+      <li>XP 由資料庫端計算，學生沒辦法用瀏覽器小手段作弊改分</li>
+    </ul>
+  </section>
+
+  <!-- 6. 疑難排解 -->
+  <section id="trouble" class="rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-2xl font-semibold text-slate-900">6. 疑難排解 🔧</h2>
+
+    <h3 class="mt-4 font-display text-lg font-semibold text-primary">登入不了，怎麼判斷原因？</h3>
+    <div class="mt-2 overflow-x-auto">
+      <table class="w-full min-w-[520px] text-sm">
+        <thead><tr class="border-b-2 border-orange-100 text-left text-slate-500">
+          <th class="py-2 pr-4">畫面顯示</th><th class="py-2 pr-4">原因</th><th class="py-2">解法</th>
+        </tr></thead>
+        <tbody class="divide-y divide-orange-50 align-top">
+          <tr>
+            <td class="py-2 pr-4 font-bold">「帳號或密碼錯誤」</td>
+            <td class="py-2 pr-4">打錯字、大小寫、或帳號根本沒建成／被刪除</td>
+            <td class="py-2">帳號一律小寫；到 Supabase → Authentication → Users 確認帳號存在，不存在就重建</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4 font-bold">「帳號存在但缺少資料檔」</td>
+            <td class="py-2 pr-4">帳號比資料庫規則先建立（缺 profile）</td>
+            <td class="py-2">SQL Editor 執行 <code class="rounded bg-orange-50 px-1">repair-profiles.sql</code></td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4 font-bold">登入後馬上被彈回登入頁</td>
+            <td class="py-2 pr-4">舊版網頁快取</td>
+            <td class="py-2">重新整理（手機：關掉分頁重開；電腦：Ctrl+Shift+R）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-2 leading-relaxed">還是不行？在 Supabase SQL Editor 執行 <code class="rounded bg-orange-50 px-1">diagnose.sql</code>，會列出所有帳號的狀態（有沒有資料檔、角色對不對、有沒有登入過），把結果貼給協助你的人一看就知道。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">老師帳號忘記密碼／被誤刪</h3>
+    <ol class="mt-1 list-decimal space-y-1 pl-5 leading-relaxed">
+      <li>到網站「建立老師帳號」分頁，註冊一個<strong>新帳號</strong>（它會先是學生身分）</li>
+      <li>Supabase SQL Editor 執行：<code class="rounded bg-orange-50 px-1">update public.profiles set role = 'teacher' where username = '新帳號名';</code></li>
+      <li>重新登入，就是老師了。舊資料（單字集、學生）都還在</li>
+    </ol>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">學生忘記密碼</h3>
+    <p class="mt-1 leading-relaxed">目前無法在網站上重設。最快的做法：老師在 Supabase Dashboard → Authentication → Users 刪掉該帳號，回老師後台重建一個（帳號名可以一樣），再重新指派單字集。注意：練習進度會歸零。</p>
+
+    <h3 class="mt-5 font-display text-lg font-semibold text-primary">其他常見問題</h3>
+    <ul class="mt-1 space-y-2 pl-1 leading-relaxed">
+      <li><strong>學生登入後看不到任何單字集？</strong>老師還沒指派。到「單字集」→「指派」勾選該學生。</li>
+      <li><strong>按 🔊 沒聲音？</strong>確認手機沒開靜音、媒體音量有開；少數舊瀏覽器不支援語音合成，換 Chrome 或 Safari 試試。</li>
+      <li><strong>改了單字內容，學生的進度會消失嗎？</strong>編輯既有單字（改拼字或中文）會保留進度；「刪掉單字」才會連進度一起刪。</li>
+      <li><strong>要收費嗎？</strong>Supabase 免費額度對家教規模（數十位學生）綽綽有餘。</li>
+    </ul>
+  </section>
+
+  <footer class="pb-6 text-center text-sm text-slate-400">
+    VocabQuest 使用手冊 · 完整技術文件見專案根目錄 CLAUDE.md
+  </footer>
+</main>
+</body>
+</html>
