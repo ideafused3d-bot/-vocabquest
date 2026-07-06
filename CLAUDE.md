@@ -23,7 +23,7 @@ test-project/                   # git repo 根目錄（GitHub: ideafused3d-bot/-
     │   └── diagnose.sql        # 診斷腳本：列出所有帳號狀態 + 常用修復 SQL（老師救援等）
     └── public/                 # 純靜態前端，可部署到任何靜態空間
         ├── index.html          # 登入頁（含「首次建立老師帳號」分頁）
-        ├── guide.html          # 使用手冊（老師/學生操作、拍照匯入單字、疑難排解；登入頁有連結）
+        ├── guide.html          # 使用手冊（老師/學生操作、拍照匯入單字、疑難排解；僅老師登入後可見，見下方「使用手冊存取限制」）
         ├── student.html        # 學生端外殼（視圖由 student.js 動態渲染）
         ├── teacher.html        # 老師端外殼（視圖由 teacher.js 動態渲染）
         └── js/
@@ -113,6 +113,14 @@ test-project/                   # git repo 根目錄（GitHub: ideafused3d-bot/-
 **老師端**：總覽（學生數/單字集數/總單字數/全體已熟記 + 近期活躍）、學生列表（streak/Lv/熟記數）、學生詳情（三狀態比例、被指派單字集進度、常錯 Top 10）、新增學生帳號、單字集 CRUD（名稱/分類/難度 + 單字逐列編輯 + 批次貼上「英文,中文」）、指派/取消指派學生、一鍵匯入示範資料、刪除單字集（confirm 保護）。
 
 **共用**：帳密登入、角色導向（登入後自動進對應頁面）、RWD（手機底部導覽）、`prefers-reduced-motion` 支援、登入頁下方隱私告知文字（小字、非彈窗，告知會記錄學習資料、僅本人與老師可見）。
+
+### 使用手冊（`guide.html`）存取限制（2026-07-06）
+
+`guide.html` 只給老師用，學生不該看到入口也不該能直接開網址進去。做法：
+
+- **入口**：原本登入頁下方的「📖 使用手冊」連結已移除；改放在 `teacher.html` 頂部列（`logout()` 按鈕旁邊）。學生端 `student.html` 完全沒有這個入口。
+- **直接輸入網址的防護**：`guide.html` 內容預設用 `<body style="visibility:hidden">` 藏起來，載入 Supabase SDK / `config.js` / `common.js` 後呼叫 `requireUser('teacher')`（`common.js` 既有的登入守衛函式，其他頁面也是用它）——未登入會導回 `index.html`、登入但是學生身分會導回 `student.html`，只有老師會把 `visibility` 改回 `visible` 看到內容。跟 `teacher.html`/`student.html` 用的是同一套守衛邏輯，不是另外寫的規則。
+- **注意**：這只擋得住「一般使用者照網址列打開頁面」。`guide.html` 本身是靜態檔案，內容還是會被下載到瀏覽器（只是 JS 執行前用 CSS 藏住），對於會開 DevTools 停用 JS 或直接讀原始碼的人不構成真正的存取控制——跟全站其他頁面的權限模型一致（見上方 RLS 摘要：真正的防線在資料庫，前端守衛只防一般誤觸）。
 
 ## 已知技術債 / 未完成
 

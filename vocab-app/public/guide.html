@@ -33,7 +33,7 @@
   }
 </style>
 </head>
-<body class="min-h-screen bg-primary-bg font-sans text-slate-800 antialiased">
+<body class="min-h-screen bg-primary-bg font-sans text-slate-800 antialiased" style="visibility:hidden">
 
 <header class="border-b border-orange-100 bg-white">
   <div class="mx-auto flex max-w-3xl items-center justify-between px-5 py-4">
@@ -229,5 +229,34 @@ beautiful,美麗的</pre>
     VocabQuest 使用手冊 · 完整技術文件見專案根目錄 CLAUDE.md
   </footer>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/config.js"></script>
+<script src="js/common.js"></script>
+<script>
+  // 防呆：sb（Supabase client）沒定義成功，代表 config.js／common.js 沒載入。
+  if (typeof sb === 'undefined') {
+    document.body.style.visibility = 'visible';
+    document.body.innerHTML = `
+      <main style="max-width:420px;margin:15vh auto;padding:24px;text-align:center;font-family:sans-serif;color:#334155">
+        <p style="font-size:32px">⚠️</p>
+        <h1 style="font-size:18px;font-weight:700;margin-top:8px">網站資源載入失敗</h1>
+        <p style="margin-top:8px;color:#64748b;line-height:1.6">
+          請先重新整理頁面（電腦按 Ctrl+Shift+R 強制重新整理）。<br />
+          若持續發生，代表網站部署不完整，請確認 js/config.js 與 js/common.js 有正確上傳到伺服器。
+        </p>
+      </main>`;
+    throw new Error('common.js / config.js 未成功載入，sb 未定義');
+  }
+</script>
+<script>
+  // 使用手冊僅供老師使用：requireUser('teacher') 未登入導回登入頁、
+  // 學生登入則導回學生端，兩種情況都會離開本頁，內容在確認身分前保持隱藏。
+  (async () => {
+    const profile = await requireUser('teacher');
+    if (!profile) return;
+    document.body.style.visibility = 'visible';
+  })();
+</script>
 </body>
 </html>
