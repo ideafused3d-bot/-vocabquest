@@ -23,7 +23,7 @@
 - Claude Code：v2.1.201。【證據】`claude --version`
 - **可用 runtime：Node v24.18.0（npm 11.16.0）— hooks／腳本唯一可靠執行器。**【證據】`node --version`
 - 不可用／不可依賴：`jq`（不存在）、`python`（WindowsApps 假捷徑，`--version` 無輸出）、`py`（不存在）。腳本禁止依賴這三者。【證據】2026-07-07 PATH 全掃與實跑。
-- 全域插件 `ui-ux-pro-max` 目前全域啟用，會注入 8+ 設計類 skills 到每個 session（處置提案見 PROPOSALS）。【證據】`~/.claude/settings.json`
+- 全域插件 `ui-ux-pro-max`：2026-07-07 已自全域停用（PROPOSALS P-001 已採納）；需要 UI 設計時再於專案層 settings 啟用。【證據】`~/.claude/settings.json`（備份 .bak-20260707）
 - MCP：本機 mcpServers 全空；僅 claude.ai 雲端連接器 Notion／Google Drive（未認證）。【證據】`~/.claude.json`
 
 ## §3 驗證指令（VocabQuest）
@@ -66,4 +66,4 @@ node --check vocab-app/public/js/config.js
 - 根目錄 `index.html` — **無關的舊 SaaS landing page 示範，不要動、不要混改**。
 - `docs/harness/` — 通用層（FROZEN）；`docs/project/` — 專案層。
 - `.claude/settings.local.json` — 歷史累積的一次性 allow 規則（清理提案見 PROPOSALS）。
-- `claude-harness/` — **已作廢的草稿包**（claude.ai 盲產的建置輸入，內含與正式版措辭不同的舊規則檔），禁止讀取或引用；刪除提案見 PROPOSALS P-004。
+- `claude-harness/` 草稿包已於 2026-07-07 刪除（PROPOSALS P-004 已採納）；若在舊 commit 歷史中看到它，一律視為已作廢、禁止引用。

@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/tina0/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.6.2/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(python scripts/search.py \"SaaS product modern professional clean\" --design-system -p \"SaaS Landing\")",
+      "Bash(where python *)",
+      "Bash(where python3 *)",
+      "Bash(where py *)",
+      "Bash(curl -s -X POST https://xidbdnupeyhiixvicyke.supabase.co/auth/v1/signup -H 'apikey: sb_publishable_vSUGDqaCl8gUwDzAWsoDYQ_Q9XMGEjv' -H 'Content-Type: application/json' -d '{\"email\":\"ctest01@vocab.local\",\"password\":\"test123456\",\"data\":{\"username\":\"ctest01\",\"display_name\":\"測試學生\",\"role\":\"student\"}}')",
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('/tmp/login.json','utf8'\\)\\).access_token\\)\")",
+      "Bash(curl -s https://xidbdnupeyhiixvicyke.supabase.co/rest/v1/profiles?select=username,role,display_name -H 'apikey: sb_publishable_vSUGDqaCl8gUwDzAWsoDYQ_Q9XMGEjv' -H 'Authorization: Bearer __CMDSUB_OUTPUT__')",
+      "Bash(curl *)",
+      "Bash(npx --yes playwright --version)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(npx playwright *)",
+      "Bash(node repro.mjs)",
+      "Bash(node repro-file.mjs)",
+      "Bash(pkill -f \"serve -l 5551\")",
+      "Bash(node repro-fail.mjs)",
+      "Bash(sed 's/555[12]/5560/' repro.mjs)",
+      "Bash(node repro3.mjs)",
+      "Bash(pkill -f \"serve -l 5560\")",
+      "Bash(node verify-stats.mjs)",
+      "Bash(grep -rniE \"service_role|sb_secret|password.*=.*['\\\\\"][a-z0-9]{6,}|api[_-]?key.*=.*['\\\\\"][a-zA-Z0-9_-]{20,}\" --include=\"*.js\" --include=\"*.html\" --include=\"*.sql\" --include=\"*.md\" .)",
+      "Bash(git init *)",
+      "Bash(node --check vocab-app/public/js/common.js)",
+      "Bash(node --check vocab-app/public/js/student.js)",
+      "Bash(node --check vocab-app/public/js/teacher.js)",
+      "Bash(node --check vocab-app/public/js/config.js)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(git config *)",
+      "Bash(git fetch *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(node verify-live.mjs)",
+      "Bash(node verify-live2.mjs)"
+    ]
+  }
+}
