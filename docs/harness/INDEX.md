@@ -6,7 +6,7 @@
 ## 權限標記定義
 
 - **FROZEN**：規則文件。日常 session 唯讀。發現錯誤或想修改 → 寫入 `docs/project/PROPOSALS.md`，等 User 裁決。絕不直接改。
-- **FREE**：工作文件。可依 `F-KNOWLEDGE-PROTOCOL.md` 規定的格式與門檻自行追加／更新。
+- **FREE**：工作文件。可依 `docs/harness/F-KNOWLEDGE-PROTOCOL.md` 規定的格式與門檻自行追加／更新。
 
 ## 通用層（全部 FROZEN；設計目標：原封複製到任何專案都不產生錯誤指引）
 
