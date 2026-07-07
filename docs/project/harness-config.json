@@ -1,0 +1,19 @@
+{
+  "$comment": "hooks 與 doctor.mjs 讀取的專案層設定。FROZEN：修改需 User 同意。路徑相對於 repo 根目錄。",
+  "protectedBranches": ["master"],
+  "protectedBranchReason": "push master = 立即部署正式站（ENV-FACTS §4.1）",
+  "frozenPaths": [
+    "docs/harness/",
+    "docs/project/harness-config.json",
+    "docs/project/MIGRATION-LOG.md"
+  ],
+  "claudeMdMaxLines": 120,
+  "verifyCommands": [
+    "node --check vocab-app/public/js/common.js",
+    "node --check vocab-app/public/js/student.js",
+    "node --check vocab-app/public/js/teacher.js",
+    "node --check vocab-app/public/js/config.js"
+  ],
+  "requiredEnvFactsSections": ["§1", "§2", "§3", "§4", "§5", "§6"],
+  "overrideEnvVar": "HARNESS_ALLOW_PROTECTED"
+}

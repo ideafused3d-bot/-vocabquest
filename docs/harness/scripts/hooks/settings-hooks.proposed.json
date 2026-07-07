@@ -1,0 +1,19 @@
+{
+  "$comment": "hooks 啟用草案——未生效。經 User 同意後：先備份 .claude/settings.json（若存在）為 .bak-YYYYMMDD，再把下方 hooks 鍵合併進去。$CLAUDE_PROJECT_DIR 由 Claude Code 在執行 hook 時提供。",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/docs/harness/scripts/hooks/block-push-protected.mjs\"" }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/docs/harness/scripts/hooks/protect-frozen.mjs\"" }
+        ]
+      }
+    ]
+  }
+}
