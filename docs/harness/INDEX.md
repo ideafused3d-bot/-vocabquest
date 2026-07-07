@@ -57,18 +57,8 @@
 
 ## 讀取順序（每個新 session）
 
-1. `CLAUDE.md`（路由中心）→ 2. 按當次任務循路由表讀對應檔 → 3. 動手前查 `ENV-FACTS §4`（危險操作）→ 4. 派工前讀 `C` 與 `E`。
+0. 跑 `node docs/harness/scripts/doctor.mjs`（有 FAIL 先回報 User）→ 1. `CLAUDE.md`（路由中心）→ 2. 按當次任務循路由表讀對應檔 → 3. 動手前查 `ENV-FACTS §4`（危險操作）→ 4. 派工前讀 `C` 與 `E`。
 
-## 建置狀態（Fable 5 session 進度勾稽）
+## 建置紀錄
 
-- [x] 骨架與備份（分支 harness/setup、CLAUDE.md.bak-20260707）
-- [x] INDEX.md
-- [x] ENV-FACTS.md ＋ harness-config.json
-- [x] A-DIAGNOSIS.md（含草稿包對照）
-- [x] CLAUDE.md 重寫 ＋ SPEC.md／OPS.md 抽離 ＋ MIGRATION-LOG.md
-- [x] C／D／E／F
-- [x] agents ＋ commands ＋ hooks 腳本 ＋ doctor（hooks 8/8 模擬測試通過、doctor 實跑）
-- [x] INSTALL-NEW-PROJECT.md ＋ 00-BOOTSTRAP.md
-- [x] G-HANDOFF-LETTER.md
-- [x] LESSONS／PLAYBOOK／PROPOSALS 骨架（含 L-001~003、PB-001、P-001~002）
-- [ ] Phase 2：對抗審查、read-back、同意清單、執行摘要
+首次建置（2026-07-07，Fable 5）的進度勾稽與草稿包對照，存於安裝專案的 `docs/project/MIGRATION-LOG.md` 附錄（專案層，不隨通用層複製）。

@@ -40,6 +40,7 @@ if (!fs.existsSync(cmPath)) {
   for (const m of text.matchAll(/`([^`\s]+\.(?:md|mjs|json|js|sql|html|yml))`/g)) seen.add(m[1]);
   let ok = 0;
   for (const p of seen) {
+    if (p.includes('*')) continue; // glob 樣式不檢查
     if (fs.existsSync(path.join(root, p))) ok++;
     else F(`CLAUDE.md 引用的路徑不存在：${p}`);
   }
@@ -72,7 +73,8 @@ const spPath = path.join(root, '.claude/settings.json');
 if (fs.existsSync(spPath)) {
   try {
     const s = JSON.parse(fs.readFileSync(spPath, 'utf8'));
-    hooksEnabled = !!(s.hooks && Object.keys(s.hooks).length > 0);
+    const hs = JSON.stringify(s.hooks || {});
+    hooksEnabled = hs.includes('block-push-protected.mjs') && hs.includes('protect-frozen.mjs'); // 必須是這兩支，別的 hook 不算
   } catch { F('.claude/settings.json 存在但解析失敗'); }
 }
 if (hooksEnabled) P('hooks 已在專案 .claude/settings.json 註冊');

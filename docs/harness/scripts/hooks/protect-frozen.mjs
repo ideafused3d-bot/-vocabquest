@@ -15,11 +15,12 @@ let cfg;
 try { cfg = JSON.parse(fs.readFileSync(path.join(cwd, 'docs/project/harness-config.json'), 'utf8')); } catch { process.exit(0); }
 if (process.env[cfg.overrideEnvVar || 'HARNESS_ALLOW_PROTECTED'] === '1') process.exit(0);
 
-const rel = path.relative(cwd, path.resolve(cwd, fp)).replace(/\\/g, '/');
+// Windows 檔案系統大小寫不敏感：一律轉小寫比對，防 Docs/Harness/ 這類繞過
+const rel = path.relative(cwd, path.resolve(cwd, fp)).replace(/\\/g, '/').toLowerCase();
 if (rel.startsWith('..')) process.exit(0); // repo 外不歸本 hook 管
 
 for (const p of cfg.frozenPaths || []) {
-  const norm = p.replace(/\\/g, '/');
+  const norm = p.replace(/\\/g, '/').toLowerCase();
   const isDir = norm.endsWith('/');
   if ((isDir && rel.startsWith(norm)) || (!isDir && rel === norm)) {
     console.error(`BLOCKED: ${rel} 是 FROZEN（harness-config.json frozenPaths）。想修改 → 寫 docs/project/PROPOSALS.md 等 User 裁決；User 同意後設 ${cfg.overrideEnvVar || 'HARNESS_ALLOW_PROTECTED'}=1 再改。`);

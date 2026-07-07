@@ -3,7 +3,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/docs/harness/scripts/hooks/block-push-protected.mjs\"" }
         ]

@@ -5,8 +5,8 @@
 ## §1 三件 User 沒問、但最關鍵的事
 
 1. **這套 harness 的真正瓶頸是「可執行的驗證」，不是模型智力。** 規則能防流程錯誤，防不了「驗證手段本身太弱」。本專案目前最強的驗證只有語法檢查＋手動煙霧測試（ENV-FACTS §3）。**每為專案增加一個可實跑的自動化檢查（哪怕只是一支 20 行的斷言腳本），對產出品質的貢獻都大於再寫十條規則。** 未來任何「要不要投資測試基建」的猶豫，答案都是要。
-2. **權限與設定會悄悄腐化。** `.claude/settings.local.json` 這類檔案會隨日常工作累積一次性 allow 規則（本專案已累積 42 行，見 PROPOSALS P-002），其中殘留的舊指令樣板會誤導後續模型模仿過時做法。建議每月讓 session 跑一次 `/reflect` 順帶盤點 settings，過期規則列入 PROPOSALS。
-3. **最大的單點風險是「習慣動作直達正式環境」**（本專案：push 保護分支＝部署，ENV-FACTS §4）。規則層已立紅線，但物理防線（hooks）在 User 同意啟用前是關閉的——doctor 每次開機都會 WARN 提醒這件事。若 User 一直沒啟用，至少維持「分支作業」紀律；這條紀律失守的那天就是事故日。
+2. **權限與設定會悄悄腐化。** `.claude/settings.local.json` 這類檔案會隨日常工作累積一次性 allow 規則，殘留的舊指令樣板會誤導後續模型模仿過時做法（安裝專案的實例與清理提案見 `docs/project/PROPOSALS.md`）。建議每月讓 session 跑一次 `/reflect` 順帶盤點 settings，過期規則列入 PROPOSALS。
+3. **最大的單點風險是「習慣動作直達正式環境」**（各專案的具體清單見 ENV-FACTS §4）。規則層已立紅線，但物理防線（hooks）在 User 同意啟用前是關閉的——doctor 每次開機都會 WARN 提醒這件事。若 User 一直沒啟用，至少維持「分支作業」紀律；這條紀律失守的那天就是事故日。
 
 ## §2 制度最可能的退化方式與預防（按發生機率排序）
 
@@ -25,9 +25,9 @@
 2. 覺得規則擋路時，你可能是對的——但正確動作是寫 PROPOSALS，不是繞過。
 3. 永遠記住 D §5：沒實跑就標 `UNVERIFIED`。這一條做到，你就贏過大多數 session。
 
-## §4 未竟事項（Fable 5 session 沒做完／刻意不做的）
+## §4 未竟事項（本節記錄首次建置專案的狀態；佈署到新專案時由 00-BOOTSTRAP 清空本節重寫）
 
 - hooks 未啟用、全域插件未改、settings.local.json 未清理——全部在等 User 對 Phase 2 同意清單逐項點頭（見 PROPOSALS P-001/P-002 與 settings-hooks.proposed.json）。
-- 模板倉未建立：通用層尚未抽成獨立 repo（INSTALL §5；建立指令見執行摘要）。
+- 模板倉未建立：通用層尚未抽成獨立 repo（建立指令見 INSTALL-NEW-PROJECT.md §5）。
 - `/context` 常駐 token 實測數字：`UNVERIFIED`（CLI 互動指令無法程式化取得）。
 - 為 VocabQuest 補一支可重複執行的煙霧測試腳本（Playwright 登入流程）——高價值，建議列為第一個正式開發任務。

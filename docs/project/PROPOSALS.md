@@ -17,4 +17,18 @@
 - 風險：清掉後常用指令會重新跳權限確認（可逐步重建）。
 - 狀態：待裁決（列於 Phase 2 同意清單）。
 
-<!-- 新提案往下加：P-003 ... -->
+## P-003 對抗審查殘餘發現（低嚴重度，未修，2026-07-07）
+
+- block-push-protected.mjs 以 `\b分支名\b` 比對，含子字串的分支（如 `feature-master-fix`）會被誤攔——方向安全（過度保護），誤攔時請 User 自行 push 或改分支名。
+- doctor.mjs 的 verifyCommands 逐條通過時靜默計數，PASS 訊息數與 pass 統計不一一對應（外觀問題，不影響判定）。
+- shell 重導向寫入可繞過 protect-frozen hook——已如實記載於 A 診斷書「已知防線缺口」，靠規則層＋verifier 兜底。
+- 狀態：記錄在案，暫不修（修復成本＞風險）。
+
+## P-004 刪除已作廢草稿包 claude-harness/（2026-07-07，Fable 5）
+
+- 提案：刪除 repo 內 `claude-harness/` 整個資料夾（未版控）。
+- 動機：內含與正式 harness 措辭不同的舊規則檔（C-DISPATCH、D-JUDGMENT、ENV-FACTS 等），弱模型全 repo 搜尋會撈到舊規則照做（對抗審查發現 #7）。已放置 DEPRECATED.md 警示＋ENV-FACTS §6 標記為禁讀。
+- 風險：無（正式版已吸收其全部有效內容；原始任務書即本次對話輸入）。
+- 狀態：待裁決（列於 Phase 2 同意清單）。
+
+<!-- 新提案往下加：P-005 ... -->

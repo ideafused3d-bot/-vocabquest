@@ -66,3 +66,4 @@ node --check vocab-app/public/js/config.js
 - 根目錄 `index.html` — **無關的舊 SaaS landing page 示範，不要動、不要混改**。
 - `docs/harness/` — 通用層（FROZEN）；`docs/project/` — 專案層。
 - `.claude/settings.local.json` — 歷史累積的一次性 allow 規則（清理提案見 PROPOSALS）。
+- `claude-harness/` — **已作廢的草稿包**（claude.ai 盲產的建置輸入，內含與正式版措辭不同的舊規則檔），禁止讀取或引用；刪除提案見 PROPOSALS P-004。

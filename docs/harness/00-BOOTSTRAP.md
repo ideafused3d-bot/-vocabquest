@@ -17,10 +17,11 @@
 ## Phase B1 — 生成專案層（依序，每檔寫完立即落檔）
 
 1. `docs/project/ENV-FACTS.md`：照 INDEX「ENV-FACTS 段落契約」§1–§6 逐段填入 B0 證據；§1 模型清單抄現行環境宣告的可用模型；查不到的欄位寫 `UNVERIFIED`，禁止留空或編造。
-2. `docs/project/harness-config.json`：照本 repo 同名檔的欄位結構填：protectedBranches（B0 第 3 步的結論）、frozenPaths（至少 `docs/harness/`、本檔、MIGRATION-LOG）、claudeMdMaxLines: 120、verifyCommands（B0 第 2 步實測過的指令）、requiredEnvFactsSections、overrideEnvVar。
+2. `docs/project/harness-config.json`：照模板同名檔的欄位結構填：protectedBranches（B0 第 3 步的結論）、frozenPaths（至少 `docs/harness/`、`docs/project/harness-config.json`、`docs/project/MIGRATION-LOG.md`、`.claude/agents/`、`.claude/commands/`）、claudeMdMaxLines: 120、verifyCommands（B0 第 2 步實測過的指令）、requiredEnvFactsSections、overrideEnvVar。
 3. 既有 CLAUDE.md 處理：備份為 `CLAUDE.md.bak-YYYYMMDD` → 內容分流：規格知識 → `docs/project/SPEC.md`；部署維運/技術債 → `docs/project/OPS.md`；血淚教訓 → `docs/project/LESSONS.md`（照 F §2 格式）→ 每條去向記入 `docs/project/MIGRATION-LOG.md`（一條都不准丟）。
 4. 新 CLAUDE.md：抄本 repo CLAUDE.md 的**結構**（紅線／開機程序／路由表／驗證鐵律／工作流摘要），把專案事實換成本專案的；紅線第 1 條必須是 B0 第 6 步找到的最危險操作。≤120 行。
-5. `docs/project/PLAYBOOK.md`、`docs/project/PROPOSALS.md`：抄本 repo 對應檔的檔頭格式說明，內容清空。
+5. `docs/project/PLAYBOOK.md`、`docs/project/PROPOSALS.md`：抄模板對應檔的檔頭格式說明，內容清空。
+6. `docs/harness/G-HANDOFF-LETTER.md` 的 §4 未竟事項：以本次安裝的實際狀態重寫該節（其餘各節不動）。
 
 ## Phase B2 — 驗證與交付
 

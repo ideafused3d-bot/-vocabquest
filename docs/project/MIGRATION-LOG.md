@@ -20,3 +20,17 @@
 | 擴充功能建議切入點（138–146） | SPEC.md「擴充功能建議切入點」 |
 
 新增（非遷移）：紅線 5–6、開機程序、路由表、驗證鐵律、工作流摘要——來自 harness 建置（見 docs/harness/）。
+
+## 附錄 A — 首次建置紀錄（2026-07-07，Fable 5）
+
+- 全部交付完成：INDEX、ENV-FACTS＋harness-config、A、CLAUDE.md 重寫＋SPEC/OPS 抽離、C/D/E/F/G、agents×2、commands×2、hooks×2＋doctor（hooks 模擬測試通過、doctor 實跑零 FAIL）、INSTALL＋00-BOOTSTRAP、LESSONS（L-001~003）／PLAYBOOK（PB-001）／PROPOSALS（P-001~004）。
+- 對抗審查：fresh-context 審查員回報 21 條發現，高嚴重度 14 條全數修復，殘餘低嚴重度記錄於 PROPOSALS P-003。
+- 工作分支：`harness/setup`（未推送）；舊 CLAUDE.md 備份：`CLAUDE.md.bak-20260707`。
+
+## 附錄 B — 草稿包對照（claude.ai 盲產版痛點的本機證實狀態）
+
+- 草稿痛點 1「主對話 Context 洪水」：**證實**（舊 CLAUDE.md 145 行知識傾倒常駐＋全域插件注入 8+ skills）→ 正式版 A 痛點 2。
+- 草稿痛點 2「自我驗證閉環」：屬行為模式，靜態掃描無法「證實」，結構性成立 → 阻斷內建於 C §4＋D §2。
+- 草稿痛點 3「工具面過載與誤用」：**部分證實**——全域插件成立（PROPOSALS P-001）；「MCP 常駐 token 過高」在本機**不成立**（mcpServers 全空）。
+- `/context` 常駐 token 實際數字：`UNVERIFIED`（CLI 互動指令無法程式化取得）。
+- 草稿包本體 `claude-harness/` 已標 DEPRECATED，刪除提案 P-004。

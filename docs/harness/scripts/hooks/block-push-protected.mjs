@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
 
 let input;
 try { input = JSON.parse(fs.readFileSync(0, 'utf8')); } catch { process.exit(0); }
-if (input.tool_name !== 'Bash') process.exit(0);
+if (input.tool_name !== 'Bash' && input.tool_name !== 'PowerShell') process.exit(0); // 兩種 shell 工具都要攔
 const cmd = (input.tool_input && input.tool_input.command) || '';
 if (!/\bgit\b[^\n]*\bpush\b/.test(cmd)) process.exit(0);
 
@@ -24,6 +24,9 @@ const block = (msg) => { console.error(msg); process.exit(2); };
 
 if (/\bpush\b[^\n]*(\s--force\b|\s-f\b|\s--force-with-lease\b)/.test(cmd)) {
   block('BLOCKED: git push --force 被 harness 禁止（ENV-FACTS §4 通用禁令）。');
+}
+if (/\bpush\b[^\n]*(\s--all\b|\s--mirror\b|\s--branches\b)/.test(cmd)) {
+  block('BLOCKED: git push --all/--mirror/--branches 會連保護分支一起推，被 harness 禁止；請指名單一非保護分支。');
 }
 for (const b of prot) {
   if (new RegExp(`\\bpush\\b[^\\n]*\\b${b.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(cmd)) {

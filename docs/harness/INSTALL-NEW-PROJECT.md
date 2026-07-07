@@ -41,4 +41,14 @@ docs/harness/                 ← 整個資料夾（含 scripts/）
 
 ## §5 模板倉（建議，尚未建立）
 
-建議把通用層抽成獨立 git repo 集中管理（建立指令見執行摘要／G 交接信）。在那之前，本 repo 的 `docs/harness/` 就是事實上的模板來源。
+建議把通用層抽成獨立 git repo 集中管理。從任何已安裝專案建立（Git Bash）：
+
+```bash
+mkdir -p ~/Documents/claude-harness-template && cd ~/Documents/claude-harness-template && git init
+mkdir -p docs .claude
+cp -r <已安裝專案路徑>/docs/harness docs/
+cp -r <已安裝專案路徑>/.claude/agents <已安裝專案路徑>/.claude/commands .claude/
+git add -A && git commit -m "harness template v1.0"
+```
+
+之後所有專案照 §1 從模板倉複製、照 §3 傳播升級。在那之前，首次建置專案的 `docs/harness/` 就是事實上的模板來源。

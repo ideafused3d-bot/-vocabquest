@@ -5,7 +5,9 @@
   "frozenPaths": [
     "docs/harness/",
     "docs/project/harness-config.json",
-    "docs/project/MIGRATION-LOG.md"
+    "docs/project/MIGRATION-LOG.md",
+    ".claude/agents/",
+    ".claude/commands/"
   ],
   "claudeMdMaxLines": 120,
   "verifyCommands": [

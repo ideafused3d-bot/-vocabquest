@@ -6,7 +6,7 @@
 ## 痛點 1：靜默失效的防線（最危險）
 
 **現象**：防護腳本／hooks 依賴環境中不存在的工具時不會報錯，只會整條防線悄悄不運作，弱模型與 User 都以為有保護。
-**實測證據**：本機無 `jq`、`python` 是假捷徑（ENV-FACTS §2）——業界慣例的 bash+jq hooks 在此環境 100% 靜默失敗。
+**實測證據**：業界慣例 bash+jq hooks 依賴的工具，在建置機上不存在或為假捷徑——此類環境中它們 100% 靜默失敗（各專案的可用／不可用清單見 ENV-FACTS §2）。
 **物理阻斷**：
 1. 所有腳本只准用 ENV-FACTS §2 列名「可用」的 runtime（本 harness 一律 Node 單檔 `.mjs`）。
 2. `doctor.mjs` 開機自檢：驗 runtime、驗路由表路徑存在、驗 hooks 是否真的註冊。每個新 session 第一個動作是跑 `/doctor`（CLAUDE.md 有此指令）。
@@ -15,16 +15,16 @@
 ## 痛點 2：指揮官下場幹活 → context 塞爆、失焦、token 燒光
 
 **現象**：主對話自己大批量讀檔、掃 repo、貼整段代碼，幾輪後 context 充滿原始素材，決策品質下降、開始重複勞動或忘記目標。
-**實測證據**：舊 CLAUDE.md 145 行知識傾倒每 session 常駐載入（已重寫為 ≤120 行路由中心，內容抽離至 SPEC/OPS）；全域插件再注入 8+ 個與多數任務無關的 skills（ENV-FACTS §2）。
+**實測證據**：建置專案的舊 CLAUDE.md 為知識傾倒式長文、每 session 常駐（重寫對照見安裝專案的 `docs/project/MIGRATION-LOG.md`）；外加全域插件注入大量與任務無關的 skills（ENV-FACTS §2、PROPOSALS）。
 **物理阻斷**：
-1. C 守則「指揮官不下場」：主對話禁止連續 3 次以上原始檔閱讀，大批量讀檔／搜尋一律派 scout 或 Explore subagent，只收 ≤40 行結論。
+1. C 守則「指揮官不下場」：主對話禁止連續讀 ≥3 個原始檔，大批量讀檔／搜尋一律派 scout 或 Explore subagent，只收 ≤40 行結論。
 2. CLAUDE.md 行數上限 120 由 doctor 機器檢查，超標即 FAIL——知識只能放進被路由的獨立檔，不能回流堆積。
 3. 派工回報格式強制「路徑＋行號，禁止大段代碼」（E 模板內建）。
 
 ## 痛點 3：一個習慣動作直達正式環境
 
-**現象**：弱模型「commit 完順手 push」是肌肉記憶；本專案 push 保護分支＝立即部署真實使用者在用的正式站（ENV-FACTS §4.1）。同類風險：對正式資料庫執行 SQL、誤觸發插件流程。
-**實測證據**：deploy workflow 綁 push 事件；正式站有真實師生資料（ENV-FACTS §4、§5）。
+**現象**：弱模型「commit 完順手 push」是肌肉記憶；若專案的部署綁在 push 事件上，一個習慣動作就直達真實使用者（各專案的具體觸發見 ENV-FACTS §4）。同類風險：對正式資料庫執行 SQL、誤觸發插件流程。
+**實測證據**：建置專案的部署觸發與正式環境見 ENV-FACTS §4、§5。
 **物理阻斷**：
 1. 規則層：日常一律 feature 分支；合併與推送保護分支需 User 明確同意（CLAUDE.md 紅線區）。
 2. 物理層：`block-push-protected.mjs` hook 攔截對 `harness-config.json` 所列保護分支的 push（待 Phase 2 User 同意啟用；未啟用期間規則層仍有效）。
@@ -40,9 +40,11 @@
 
 另一條極限：本 harness 防不了「User 自己下達的危險指令」——hooks 有 override 環境變數、規則可被 User 推翻，這是設計如此（User 永遠有最終權）。
 
-## 草稿包對照（claude.ai 盲產版 A §1–§3 的證實狀態，2026-07-07 本機核驗）
+## 已知防線缺口（誠實記錄，勿當成不存在）
 
-- 草稿痛點 1「主對話 Context 洪水」：**證實**（舊 CLAUDE.md 145 行知識傾倒每 session 常駐＋插件注入，ENV-FACTS §2）→ 本檔痛點 2。
-- 草稿痛點 2「自我驗證閉環」：屬行為模式，靜態掃描無法「證實」，但結構性成立 → 阻斷已內建於 C 守則 §4（隔離驗證）＋ D 矩陣 §2（完成判準）。
-- 草稿痛點 3「工具面過載與誤用」：**部分證實**——全域插件 8+ skills 成立（→ PROPOSALS P-001）；「MCP 工具常駐 token 過高」在本機**不成立**（mcpServers 全空，ENV-FACTS §2），若未來加裝 MCP 再評估。
-- `/context` 常駐 token 實際數字：CLI 互動指令無法程式化取得，`UNVERIFIED`。
+- hooks 只攔 Edit／Write 工具與 shell 中的 `git push` 指令；**任意 shell 重導向寫入**（如 `echo x > docs/harness/INDEX.md`）無法被完整解析攔截。此類寫入靠三層兜底：規則層紅線、verifier 的 `git status` 範圍檢查（D §2.6）、User 的 diff 審閱。
+- hooks 的設定檔不存在時採 fail-open（放行），由 doctor 開機自檢負責告警——所以「跑 doctor」是不可省略的開機步驟。
+
+## 草稿包對照
+
+claude.ai 盲產草稿的痛點證實狀態屬建置紀錄，存於安裝專案的 `docs/project/MIGRATION-LOG.md` 附錄 B。
