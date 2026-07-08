@@ -53,7 +53,7 @@ function wrongbookWords() {
 
 // ---------- 視圖切換 ----------
 
-const VIEWS = ['dashboard', 'practice', 'progress', 'wrongbook'];
+const VIEWS = ['dashboard', 'practice', 'cards', 'progress', 'wrongbook'];
 
 function showView(name) {
   for (const v of VIEWS) {
@@ -97,10 +97,16 @@ function renderDashboard() {
               <span class="ml-1 rounded-full px-2 py-0.5 text-[11px] font-bold ${diffColor}">${escapeHtml(set.difficulty)}</span>
             </p>
           </div>
-          <button data-practice-set="${set.id}"
-            class="shrink-0 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-dark active:scale-95">
-            練習
-          </button>
+          <div class="flex shrink-0 gap-2">
+            <button data-cards-set="${set.id}"
+              class="rounded-xl border-2 border-orange-100 px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-orange-50 hover:text-primary active:scale-95">
+              單字卡
+            </button>
+            <button data-practice-set="${set.id}"
+              class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-dark active:scale-95">
+              練習
+            </button>
+          </div>
         </div>
         <div class="mt-3 flex items-center gap-2">
           <div class="h-2.5 flex-1 overflow-hidden rounded-full bg-orange-100">
@@ -188,6 +194,143 @@ function renderDashboard() {
   document.querySelectorAll('[data-practice-set]').forEach((btn) =>
     btn.addEventListener('click', () => startPractice('set', Number(btn.dataset.practiceSet)))
   );
+  document.querySelectorAll('[data-cards-set]').forEach((btn) =>
+    btn.addEventListener('click', () => openCards(Number(btn.dataset.cardsSet)))
+  );
+}
+
+// ---------- 單字卡（瀏覽模式，不寫進度） ----------
+
+let cardsView = null; // { setId, mode: 'flash'|'list', dir: 'en2zh'|'zh2en', idx, showBack }
+
+function openCards(setId) {
+  cardsView = { setId, mode: 'flash', dir: 'en2zh', idx: 0, showBack: false };
+  renderCards();
+  showView('cards');
+}
+
+function renderCards() {
+  if (!cardsView) return;
+  const set = sets.find((s) => s.id === cardsView.setId);
+  const list = words.filter((w) => w.set_id === cardsView.setId);
+  const el = document.getElementById('view-cards');
+
+  const header = `
+    <div class="flex items-center gap-2">
+      <button id="cards-back" class="rounded-lg px-2 py-1 text-xl font-bold text-slate-400 transition hover:text-slate-700" aria-label="返回首頁">←</button>
+      <h1 class="min-w-0 truncate font-display text-2xl font-semibold text-slate-900">${escapeHtml(set?.name || '單字卡')}</h1>
+    </div>`;
+
+  if (!set || !list.length) {
+    el.innerHTML = `${header}
+      <div class="rounded-xl2 bg-white p-8 text-center shadow-card">
+        <p class="text-3xl">📭</p>
+        <p class="mt-2 font-bold text-slate-600">這個單字集目前沒有單字</p>
+      </div>`;
+    document.getElementById('cards-back').addEventListener('click', () => showView('dashboard'));
+    return;
+  }
+
+  cardsView.idx = Math.min(Math.max(cardsView.idx, 0), list.length - 1);
+  const modeBtn = (mode, label) => `
+    <button data-cards-mode="${mode}"
+      class="flex-1 rounded-lg py-2 text-sm font-bold transition ${cardsView.mode === mode ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
+      ${label}
+    </button>`;
+
+  let body = '';
+  if (cardsView.mode === 'flash') {
+    const w = list[cardsView.idx];
+    const frontIsEn = cardsView.dir === 'en2zh';
+    const front = frontIsEn ? w.english : w.chinese;
+    const back = frontIsEn ? w.chinese : w.english;
+    const dirBtn = (dir, label) => `
+      <button data-cards-dir="${dir}"
+        class="rounded-lg px-3 py-1.5 text-xs font-bold transition ${cardsView.dir === dir ? 'bg-learn text-white' : 'bg-white text-slate-500 shadow-sm hover:text-slate-700'}">
+        ${label}
+      </button>`;
+    // 英文面（正面或翻面後）才顯示發音鈕
+    const speakBtn = (shown) => shown ? `
+      <button id="cards-speak" class="mx-auto mt-4 flex h-11 w-11 items-center justify-center rounded-full bg-learn/10 text-learn transition hover:bg-learn/20 active:scale-95" aria-label="播放發音">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 010 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>` : '';
+
+    body = `
+      <div class="flex items-center justify-between">
+        <div class="flex gap-1.5 rounded-xl bg-orange-100/60 p-1">
+          ${dirBtn('en2zh', '英 → 中')}${dirBtn('zh2en', '中 → 英')}
+        </div>
+        <span class="text-sm font-bold text-slate-500">${cardsView.idx + 1} / ${list.length}</span>
+      </div>
+      <div id="flash-card" role="button" tabindex="0" aria-label="翻面"
+        class="anim-pop flex min-h-[16rem] cursor-pointer flex-col items-center justify-center rounded-xl2 bg-white p-8 text-center shadow-card transition active:scale-[0.99]">
+        ${cardsView.showBack ? `
+          <p class="text-sm font-bold text-slate-400">${escapeHtml(front)}</p>
+          <p class="mt-3 font-display text-4xl font-semibold text-slate-900">${escapeHtml(back)}</p>
+          ${speakBtn(true)}` : `
+          <p class="font-display text-4xl font-semibold text-slate-900">${escapeHtml(front)}</p>
+          ${speakBtn(frontIsEn)}
+          <p class="mt-5 text-xs font-bold text-slate-400">點一下卡片看${frontIsEn ? '中文' : '英文'}</p>`}
+      </div>
+      <div class="flex gap-3">
+        <button id="cards-prev" ${cardsView.idx === 0 ? 'disabled' : ''}
+          class="flex-1 rounded-xl border-2 border-orange-100 py-3 font-display font-semibold text-slate-600 transition hover:bg-orange-50 disabled:cursor-not-allowed disabled:opacity-40">← 上一張</button>
+        <button id="cards-next" ${cardsView.idx === list.length - 1 ? 'disabled' : ''}
+          class="flex-1 rounded-xl bg-primary py-3 font-display font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40">下一張 →</button>
+      </div>`;
+  } else {
+    const badge = {
+      mastered: '<span class="shrink-0 rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-700">已熟記</span>',
+      learning: '<span class="shrink-0 rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-700">學習中</span>',
+      new: '<span class="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-500">未學習</span>',
+    };
+    body = `
+      <div class="space-y-3">
+        ${list.map((w) => `
+          <div class="flex items-center gap-3 rounded-xl2 bg-white p-4 shadow-card">
+            <button data-speak="${escapeHtml(w.english)}"
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-learn/10 text-learn transition hover:bg-learn/20 active:scale-95" aria-label="播放 ${escapeHtml(w.english)} 發音">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 010 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="min-w-0 flex-1">
+              <p class="font-display text-lg font-semibold text-slate-900">${escapeHtml(w.english)}</p>
+              <p class="truncate text-sm text-slate-500">${escapeHtml(w.chinese)}</p>
+            </div>
+            ${badge[wordStatus(progressMap.get(w.id))] || badge.new}
+          </div>`).join('')}
+      </div>`;
+  }
+
+  el.innerHTML = `${header}
+    <div class="flex gap-1.5 rounded-xl bg-orange-100/60 p-1">
+      ${modeBtn('flash', '🃏 單字卡')}${modeBtn('list', '📋 清單')}
+    </div>
+    ${body}`;
+
+  document.getElementById('cards-back').addEventListener('click', () => showView('dashboard'));
+  document.querySelectorAll('[data-cards-mode]').forEach((btn) =>
+    btn.addEventListener('click', () => { cardsView.mode = btn.dataset.cardsMode; cardsView.showBack = false; renderCards(); })
+  );
+
+  if (cardsView.mode === 'flash') {
+    const w = list[cardsView.idx];
+    document.querySelectorAll('[data-cards-dir]').forEach((btn) =>
+      btn.addEventListener('click', () => { cardsView.dir = btn.dataset.cardsDir; cardsView.showBack = false; renderCards(); })
+    );
+    const card = document.getElementById('flash-card');
+    const flip = () => { cardsView.showBack = !cardsView.showBack; renderCards(); };
+    card.addEventListener('click', (e) => { if (!e.target.closest('#cards-speak')) flip(); });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+    });
+    document.getElementById('cards-speak')?.addEventListener('click', () => speak(w.english));
+    document.getElementById('cards-prev')?.addEventListener('click', () => { cardsView.idx--; cardsView.showBack = false; renderCards(); });
+    document.getElementById('cards-next')?.addEventListener('click', () => { cardsView.idx++; cardsView.showBack = false; renderCards(); });
+  } else {
+    document.querySelectorAll('#view-cards [data-speak]').forEach((btn) =>
+      btn.addEventListener('click', () => speak(btn.dataset.speak))
+    );
+  }
 }
 
 // ---------- 練習佇列 ----------
